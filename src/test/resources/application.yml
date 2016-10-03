@@ -1,0 +1,8 @@
+logging:
+  level:
+    org:
+      springframework: ERROR
+      hibernate: ERROR
+    com:
+      dmitring:
+        yainterfaceliftdownloader: DEBUG

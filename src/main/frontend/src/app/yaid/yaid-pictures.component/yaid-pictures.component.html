@@ -1,0 +1,20 @@
+<div class="yaid">
+  <div class="yaid-error-class">
+    <yaid-error></yaid-error>
+  </div>
+
+  <div class="yaid-status-filter-class">
+    <yaid-status-filter></yaid-status-filter>
+  </div>
+
+  <div class="ui-g yaid-pictures-class">
+    <div *ngFor="let picture of picturesModel.pictures"
+         class="ui-g-12 ui-md-6 ui-lg-4 ui-xl-3 yuid-picture-wrapper">
+      <yaid-picture [picture]="picture"></yaid-picture>
+    </div>
+  </div>
+
+  <div class="yaid-paginator-class">
+    <yaid-paginator></yaid-paginator>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+h1 {
+  margin: 5px 0;
+}
+
+.yaid-error-class {
+  margin-top: 10px;
+  padding-left: 24px;
+}
+
+.ui-messages {
+  padding: 10px 15px !important;
+}
+
+.yaid-status-filter-class {
+  padding: 0 23px;
+}
+
+.yaid-pictures-class {
+  padding: 20px 12px 0;
+}
+
+.yaid-pictures-class .yuid-picture-wrapper {
+  padding: 12px;
+}
+
+.yaid-paginator-class {
+  margin-top: 30px;
+}
+
+.ui-button-text.ui-c {
+  font-weight: normal !important;
+  padding: 6px 12px !important;
+}
+
+.yuid-status-display {
+  padding: 5px 0;
+}
+
+.yuid-status-apply {
+  margin-top: 12px !important;
+}
+
+.yaid-picture img {
+  width: 100%;
+}

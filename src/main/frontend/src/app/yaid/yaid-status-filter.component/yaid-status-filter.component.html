@@ -1,0 +1,8 @@
+<p-selectButton [multiple]=true [options]="statuses" [(ngModel)]="userSelectedStatuses"></p-selectButton>
+<div class="ui-widget yuid-status-display">Currently selected Types:
+  <span>{{getCurrentlySelected()}}</span>
+</div>
+<button class="yuid-status-apply" pButton type="button"
+        (click)="applyStatusFilter()"
+        [disabled]="isDisabled()"
+        label="Apply status filter"></button>

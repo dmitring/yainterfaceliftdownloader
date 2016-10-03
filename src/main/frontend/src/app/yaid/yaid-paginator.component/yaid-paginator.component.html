@@ -1,0 +1,5 @@
+<p-paginator [rows]="picturesModel.pageItemSize"
+             [totalRecords]="picturesModel.totalElements"
+             [rowsPerPageOptions]="[12,24,36,48,60]"
+             (onPageChange)="pageChanged($event)">
+</p-paginator>

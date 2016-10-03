@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:derby:./database/yainterfaceliftdownloader
+    username: derby
+    password: nopassword
+  jpa:
+    database-platform: org.hibernate.dialect.DerbyDialect
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  resources:
+    static-locations: classpath:/html/
+
+logging:
+  level:
+    org:
+      springframework:
+        web: ERROR
+    com:
+      dmitring:
+        yainterfaceliftdownloader: DEBUG
+
+com:
+  dmitring:
+    yainterfaceliftdownloader:
+      downloadUrlPrefix: downloaded
+      thumbnailPrefixPath: thumbnails
+      fullPicturePrefixPath: fullPictures
+      pictureFileExtension: .jpg
+      interfaceliftPageUrlPattern: "https://interfacelift.com/wallpaper/downloads/date/wide_16:9/1920x1080/index%d.html"
+      urlConnectionTimeout: 3000
+      urlReadTimeout: 15000
+      crawlingDelay: 180000
+      downloadNecessaryDelay: 120000
+      checkIntegrityDelay: 300000
+      pictureDownloadAttemptCount: 5
+      schedulerThreadCount: 4
+      successCountInARow: 10
+      maxCrawlerAttempts: 5

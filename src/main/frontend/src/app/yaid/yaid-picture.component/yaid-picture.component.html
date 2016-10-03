@@ -1,0 +1,7 @@
+<div class="yaid-picture">
+  <strong>{{ picture.title}}</strong>
+  <img src="{{picture.thumbnailDownloadUrl}}">
+  <button *ngIf="isAcceptable()" pButton type="text" (click)="accept()" label="Accept"></button>
+  <button *ngIf="isCosiderable()" pButton type="text" (click)="returnToConsider()" label="Consider"></button>
+  <button *ngIf="isRejectable()" pButton type="test" (click)="reject()" label="Reject"></button>
+</div>
