@@ -29,14 +29,12 @@ class CrawlerServiceTest {
     void setUp() {
         pictureFoundHandler = mock(NewPictureFoundHandlerService.class)
         pageCrawler = mock(PageCrawler.class)
+        maxAttemptCount = 1
+        crawlerService = new CrawlerService(pictureFoundHandler, pageCrawler, maxAttemptCount)
     }
 
     @Test
     void testImpossibleSimultaneouslyCrawling() {
-        // arrange
-        maxAttemptCount = 1
-        crawlerService = new CrawlerService(pictureFoundHandler, pageCrawler, maxAttemptCount)
-
         // act
         def hasCrawlingStartedFirstTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
         def hasCrawlingStartedSecondTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
@@ -49,10 +47,6 @@ class CrawlerServiceTest {
 
     @Test
     void testPossibleSequentlyCrawling() {
-        // arrange
-        maxAttemptCount = 1
-        crawlerService = new CrawlerService(pictureFoundHandler, pageCrawler, maxAttemptCount)
-
         // act
         def hasCrawlingStartedFirstTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
         def hasCrawlingStartedFirstTime = hasCrawlingStartedFirstTimeFuture.get(1000, TimeUnit.MILLISECONDS)

@@ -61,7 +61,7 @@ public class CrawlerService {
             parsedPage = pageCrawler.getPagePictureInfo(pageNumber);
             parsedUnsuccessfully = (parsedPage == null);
             attemptCount++;
-        } while (parsedUnsuccessfully || attemptCount < maxAttemptCount);
+        } while (parsedUnsuccessfully && attemptCount < maxAttemptCount);
 
         if (!parsedUnsuccessfully)
             parsedPage.getPictureInfo().forEach(newPictureFoundHandler::handleImage);
