@@ -1,5 +1,6 @@
 package com.dmitring.yainterfaceliftdownloader.utils
 
+import com.dmitring.yainterfaceliftdownloader.utils.impl.DownloadingPictureTaskManagerImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,13 +14,13 @@ import java.util.function.Supplier
 import static org.junit.Assert.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DownloadingPictureTaskManagerTest.class)
-class DownloadingPictureTaskManagerTest {
-    def downloadingPictureTaskManager
+@SpringBootTest(classes = DownloadingPictureTaskManagerImplTest.class)
+class DownloadingPictureTaskManagerImplTest {
+    DownloadingPictureTaskManager downloadingPictureTaskManager
 
     @Before
     void setUp() {
-        downloadingPictureTaskManager = new DownloadingPictureTaskManager()
+        downloadingPictureTaskManager = new DownloadingPictureTaskManagerImpl()
     }
 
     @Test

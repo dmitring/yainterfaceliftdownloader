@@ -2,6 +2,7 @@ package com.dmitring.yainterfaceliftdownloader.services
 
 import com.dmitring.yainterfaceliftdownloader.domain.ParsedPage
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
+import com.dmitring.yainterfaceliftdownloader.utils.AssertFutureUtil
 import com.dmitring.yainterfaceliftdownloader.utils.crawler.PageCrawler
 import org.junit.Before
 import org.junit.Test
@@ -10,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 
 import static org.junit.Assert.assertTrue
+import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
@@ -38,8 +39,8 @@ class CrawlerServiceTest {
         // act
         def hasCrawlingStartedFirstTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
         def hasCrawlingStartedSecondTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
-        def hasCrawlingStartedFirstTime = hasCrawlingStartedFirstTimeFuture.get(1000, TimeUnit.MILLISECONDS)
-        def hasCrawlingStartedSecondTime = hasCrawlingStartedSecondTimeFuture.get(1000, TimeUnit.MILLISECONDS)
+        def hasCrawlingStartedFirstTime = AssertFutureUtil.get(hasCrawlingStartedFirstTimeFuture, 100)
+        def hasCrawlingStartedSecondTime = AssertFutureUtil.get(hasCrawlingStartedSecondTimeFuture, 100)
 
         // assert
         assertTrue(hasCrawlingStartedFirstTime != hasCrawlingStartedSecondTime)
@@ -49,9 +50,9 @@ class CrawlerServiceTest {
     void testPossibleSequentlyCrawling() {
         // act
         def hasCrawlingStartedFirstTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
-        def hasCrawlingStartedFirstTime = hasCrawlingStartedFirstTimeFuture.get(1000, TimeUnit.MILLISECONDS)
+        def hasCrawlingStartedFirstTime = AssertFutureUtil.get(hasCrawlingStartedFirstTimeFuture, 100)
         def hasCrawlingStartedSecondTimeFuture = CompletableFuture.supplyAsync(crawlerService.&startCrawling)
-        def hasCrawlingStartedSecondTime = hasCrawlingStartedSecondTimeFuture.get(1000, TimeUnit.MILLISECONDS)
+        def hasCrawlingStartedSecondTime = AssertFutureUtil.get(hasCrawlingStartedSecondTimeFuture, 100)
 
         // assert
         assertTrue(hasCrawlingStartedFirstTime)
