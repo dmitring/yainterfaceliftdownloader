@@ -1,5 +1,6 @@
 package com.dmitring.yainterfaceliftdownloader.utils.crawler
 
+import com.dmitring.yainterfaceliftdownloader.utils.crawler.impl.PictureDownloaderImpl
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.PictureStreamProvider
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.UrlStreamProvider
 import org.junit.Test
@@ -13,8 +14,8 @@ import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PictureDownloaderTest.class)
-class PictureDownloaderTest {
+@SpringBootTest(classes = PictureDownloaderImplTest.class)
+class PictureDownloaderImplTest {
     byte[] testData = [0xff, 0x0c, 0x00, 0x94, 0x39, 0xff, 0x00, 0x01]
 
     def getSpyInputStream() {
@@ -35,9 +36,8 @@ class PictureDownloaderTest {
         return errorfulOutputStream
     }
 
-    void test(def inputStreamSupplier, def outputStreamSupplier, def doesTestData) {
+    void test(def inputStreamSupplier, def outputStreamSupplier, def doTestData) {
         // arrange
-
         def inputStream = inputStreamSupplier()
         def mockInputStreamProvider = mock(UrlStreamProvider.class)
         when(mockInputStreamProvider.getInputStream(any(String.class) as String)).thenReturn(inputStream)
@@ -46,13 +46,13 @@ class PictureDownloaderTest {
         def mockOutputStreamProvider = mock(PictureStreamProvider.class)
         when(mockOutputStreamProvider.getOutputStream(any(String.class) as String)).thenReturn(outputStream)
 
-        def pictureDownloader = new PictureDownloader(mockInputStreamProvider, mockOutputStreamProvider)
+        def pictureDownloader = new PictureDownloaderImpl(mockInputStreamProvider, mockOutputStreamProvider)
 
         // act
         pictureDownloader.download("test://some_url", "/test/some_path")
 
         // assert
-        if (doesTestData)
+        if (doTestData)
             assertArrayEquals(testData, outputStream.toByteArray())
 
         verify(inputStream).close()

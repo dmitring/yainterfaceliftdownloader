@@ -5,6 +5,7 @@ import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
 import com.dmitring.yainterfaceliftdownloader.repositories.ApplicationVariableRepository
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
+import com.dmitring.yainterfaceliftdownloader.services.impl.NewPictureFoundHandlerServiceImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,17 +13,15 @@ import org.mockito.ArgumentCaptor
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertFalse
-import static org.junit.Assert.assertTrue
+import static org.junit.Assert.*
 import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         properties = "com.dmitring.yainterfaceliftdownloader.successCountInARow = 10",
-        classes = NewPictureFoundHandlerServiceTest.class)
-class NewPictureFoundHandlerServiceTest {
+        classes = NewPictureFoundHandlerServiceImplTest.class)
+class NewPictureFoundHandlerServiceImplTest {
 
     def maxSuccessCountInARow
     def rawCrawlFinishedFalse
@@ -55,7 +54,7 @@ class NewPictureFoundHandlerServiceTest {
         applicationVariablesRepository = mock(ApplicationVariableRepository.class)
         downloadManager = mock(PictureDownloadManager.class)
 
-        newPictureFoundHandler = new NewPictureFoundHandlerService(
+        newPictureFoundHandler = new NewPictureFoundHandlerServiceImpl(
                 pictureRepository, applicationVariablesRepository, downloadManager, maxSuccessCountInARow)
     }
 

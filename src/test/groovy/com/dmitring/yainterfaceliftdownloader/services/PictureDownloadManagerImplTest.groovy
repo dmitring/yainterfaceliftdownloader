@@ -3,6 +3,7 @@ package com.dmitring.yainterfaceliftdownloader.services
 import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.Picture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler
+import com.dmitring.yainterfaceliftdownloader.services.impl.PictureDownloadManagerImpl
 import com.dmitring.yainterfaceliftdownloader.utils.AssertFutureUtil
 import com.dmitring.yainterfaceliftdownloader.utils.DownloadingPictureTaskManager
 import com.dmitring.yainterfaceliftdownloader.utils.crawler.PictureDownloader
@@ -21,8 +22,8 @@ import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PictureDownloadManagerTest.class)
-class PictureDownloadManagerTest {
+@SpringBootTest(classes = PictureDownloadManagerImplTest.class)
+class PictureDownloadManagerImplTest {
     def etalonHashsum
 
     def mockPictureHashsumProvider
@@ -62,7 +63,7 @@ class PictureDownloadManagerTest {
         downloadingPictureTaskManager = new StubDownloadingPictureTaskManager()
         picture = new InterfaceliftPicture("pictureId", "pictureTittle", "test://pictureThumbnail", "test://fullPicture")
 
-        pictureDownloadManager = new PictureDownloadManager(
+        pictureDownloadManager = new PictureDownloadManagerImpl(
                 mockPictureHashsumProvider, mockPictureHandler, mockPictureDownloader, downloadingPictureTaskManager)
     }
 

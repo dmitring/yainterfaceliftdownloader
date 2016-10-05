@@ -2,6 +2,7 @@ package com.dmitring.yainterfaceliftdownloader.services
 
 import com.dmitring.yainterfaceliftdownloader.domain.ParsedPage
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
+import com.dmitring.yainterfaceliftdownloader.services.impl.CrawlerServiceImpl
 import com.dmitring.yainterfaceliftdownloader.utils.AssertFutureUtil
 import com.dmitring.yainterfaceliftdownloader.utils.crawler.PageCrawler
 import org.junit.Before
@@ -17,8 +18,8 @@ import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DownloadNecessaryPictureServiceTest.class)
-class CrawlerServiceTest {
+@SpringBootTest(classes = DownloadNecessaryPictureServiceImplTest.class)
+class CrawlerServiceImplTest {
 
     def pictureFoundHandler
     def pageCrawler
@@ -31,7 +32,7 @@ class CrawlerServiceTest {
         pictureFoundHandler = mock(NewPictureFoundHandlerService.class)
         pageCrawler = mock(PageCrawler.class)
         maxAttemptCount = 1
-        crawlerService = new CrawlerService(pictureFoundHandler, pageCrawler, maxAttemptCount)
+        crawlerService = new CrawlerServiceImpl(pictureFoundHandler, pageCrawler, maxAttemptCount)
     }
 
     @Test
@@ -68,8 +69,6 @@ class CrawlerServiceTest {
                 new PictureInfo("3", "p3", "test://t3", "test://f3")
         ]
         when(pageCrawler.getPagePictureInfo(any(int))).thenReturn(new ParsedPage(pictures.toList(), false))
-        maxAttemptCount = 1
-        crawlerService = new CrawlerService(pictureFoundHandler, pageCrawler, maxAttemptCount)
 
         // act
         crawlerService.startCrawling()

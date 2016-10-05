@@ -4,6 +4,7 @@ import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.Picture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureStatus
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
+import com.dmitring.yainterfaceliftdownloader.services.impl.PicturesRepairingServiceImpl
 import com.dmitring.yainterfaceliftdownloader.utils.hashsum.PictureHashsumProvider
 import org.junit.Before
 import org.junit.Test
@@ -18,8 +19,8 @@ import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PicturesRepairingServiceTest.class)
-class PicturesRepairingServiceTest {
+@SpringBootTest(classes = PicturesRepairingServiceImplTest.class)
+class PicturesRepairingServiceImplTest {
 
     def pictureRepository
     def downloadManager
@@ -38,7 +39,7 @@ class PicturesRepairingServiceTest {
         picturesRepairingService = mock(PictureHashsumProvider.class);
         when(pictureHashsumProvider.getHashsum(any(Picture.class))).thenReturn(etalonHashsum)
 
-        picturesRepairingService = new PicturesRepairingService(
+        picturesRepairingService = new PicturesRepairingServiceImpl(
                 pictureRepository, downloadManager, pictureHashsumProvider)
     }
 

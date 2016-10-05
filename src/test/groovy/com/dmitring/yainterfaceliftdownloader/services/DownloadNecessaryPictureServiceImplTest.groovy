@@ -3,6 +3,7 @@ package com.dmitring.yainterfaceliftdownloader.services
 import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureStatus
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
+import com.dmitring.yainterfaceliftdownloader.services.impl.DownloadNecessaryPictureServiceImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,8 +17,8 @@ import static org.mockito.Matchers.any
 import static org.mockito.Mockito.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DownloadNecessaryPictureServiceTest.class)
-class DownloadNecessaryPictureServiceTest {
+@SpringBootTest(classes = DownloadNecessaryPictureServiceImplTest.class)
+class DownloadNecessaryPictureServiceImplTest {
 
     def pictureRepository
     def downloadManager
@@ -29,7 +30,7 @@ class DownloadNecessaryPictureServiceTest {
         pictureRepository = mock(PictureRepository.class)
         downloadManager = mock(PictureDownloadManager.class, (Answer){CompletableFuture.completedFuture(Boolean.TRUE)})
 
-        downloadNecessaryPictureService = new DownloadNecessaryPictureService(pictureRepository, downloadManager)
+        downloadNecessaryPictureService = new DownloadNecessaryPictureServiceImpl(pictureRepository, downloadManager)
     }
 
     @Test

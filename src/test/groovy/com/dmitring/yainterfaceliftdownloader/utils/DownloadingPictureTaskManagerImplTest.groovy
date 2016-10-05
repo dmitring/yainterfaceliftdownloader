@@ -29,11 +29,7 @@ class DownloadingPictureTaskManagerImplTest {
         def taskFuture = downloadingPictureTaskManager.putTask("someKey", (Supplier<Boolean>) { return true })
 
         // assert
-        try {
-            assertTrue(taskFuture.get(1000, TimeUnit.MILLISECONDS))
-        } catch (TimeoutException exception) {
-            fail("Download must complete almost immediately. All long time operation was mocked.")
-        }
+        AssertFutureUtil.getAndAssert(taskFuture, true, 100)
     }
 
     @Test
@@ -42,11 +38,7 @@ class DownloadingPictureTaskManagerImplTest {
         def taskFuture = downloadingPictureTaskManager.putTask("someKey", (Supplier<Boolean>) { return false })
 
         // assert
-        try {
-            assertFalse(taskFuture.get(1000, TimeUnit.MILLISECONDS))
-        } catch (TimeoutException exception) {
-            fail("Download must complete almost immediately. All long time operation was mocked.")
-        }
+        AssertFutureUtil.getAndAssert(taskFuture, false, 100)
     }
 
     @Test

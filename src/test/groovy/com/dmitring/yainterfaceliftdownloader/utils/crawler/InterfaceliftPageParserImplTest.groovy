@@ -1,6 +1,7 @@
 package com.dmitring.yainterfaceliftdownloader.utils.crawler
 
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
+import com.dmitring.yainterfaceliftdownloader.utils.crawler.impl.InterfaceliftPageParserImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,13 +11,13 @@ import org.springframework.test.context.junit4.SpringRunner
 import static org.junit.Assert.*
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = InterfaceliftPageParserTest.class)
-class InterfaceliftPageParserTest {
+@SpringBootTest(classes = InterfaceliftPageParserImplTest.class)
+class InterfaceliftPageParserImplTest {
     def interfaceliftPageParser
 
     @Before
     void setUp() {
-        interfaceliftPageParser = new InterfaceliftPageParser()
+        interfaceliftPageParser = new InterfaceliftPageParserImpl()
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -87,7 +88,7 @@ class InterfaceliftPageParserTest {
         def parsedPage = interfaceliftPageParser.parsePage(nonInterfaceliftHtmlPageContent)
 
         // assert
-        assertFalse(parsedPage.doesNextPageExist())
+        assertFalse(parsedPage.isNextPageExists())
         assertArrayEquals(pictures.toArray(), parsedPage.getPictureInfo().toArray())
     }
 
@@ -112,7 +113,7 @@ class InterfaceliftPageParserTest {
         def parsedPage = interfaceliftPageParser.parsePage(nonInterfaceliftHtmlPageContent)
 
         // assert
-        assertTrue(parsedPage.doesNextPageExist())
+        assertTrue(parsedPage.isNextPageExists())
         assertArrayEquals(pictures.toArray(), parsedPage.getPictureInfo().toArray())
     }
 }

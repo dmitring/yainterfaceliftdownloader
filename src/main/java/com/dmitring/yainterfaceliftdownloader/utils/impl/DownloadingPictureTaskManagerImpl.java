@@ -18,6 +18,7 @@ public class DownloadingPictureTaskManagerImpl implements DownloadingPictureTask
         this.pendingDownloadTaskMap = new ConcurrentHashMap<>();
     }
 
+    @Override
     public CompletableFuture<Boolean> putTask(String taskId, Supplier<Boolean> task) {
         CompletableFuture<Boolean> presentTaskFuture = pendingDownloadTaskMap.putIfAbsent(taskId, fakeTaskFuture);
         if (presentTaskFuture != null)
@@ -30,11 +31,13 @@ public class DownloadingPictureTaskManagerImpl implements DownloadingPictureTask
         return taskFuture;
     }
 
+    @Override
     public void ensureCancelTask(String taskId) {
         pendingDownloadTaskMap.computeIfPresent(taskId,
                 ((id, taskFuture) -> (taskFuture.cancel(false))? null : taskFuture));
     }
 
+    @Override
     public void stopAllTasks() {
         pendingDownloadTaskMap.forEach((taskKey, task) -> task.cancel(false));
     }
