@@ -1,5 +1,6 @@
 package com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.impl;
 
+import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.UrlStreamProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 @Component
-public class UrlStreamProviderImpl {
+public class UrlStreamProviderImpl implements UrlStreamProvider {
 
     @Value("${com.dmitring.yainterfaceliftdownloader.urlReadTimeout}")
     private int readTimeoutMillis;
@@ -18,6 +19,7 @@ public class UrlStreamProviderImpl {
     @Value("${com.dmitring.yainterfaceliftdownloader.urlConnectionTimeout}")
     private int connectTimeoutMillis;
 
+    @Override
     public URLConnection getConnection(String urlString) throws IOException {
         checkUrlString(urlString);
         URL url = new URL(urlString);
@@ -28,10 +30,12 @@ public class UrlStreamProviderImpl {
         return connection;
     }
 
+    @Override
     public InputStream getInputStream(URLConnection connection) throws IOException {
         return new BufferedInputStream(connection.getInputStream());
     }
 
+    @Override
     public InputStream getInputStream(String urlString) throws IOException {
         final URLConnection connection = getConnection(urlString);
         return getInputStream(connection);
