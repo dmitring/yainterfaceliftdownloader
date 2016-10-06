@@ -2,6 +2,7 @@ package com.dmitring.yainterfaceliftdownloader.services
 
 import com.dmitring.yainterfaceliftdownloader.domain.ApplicationVariable
 import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
+import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
 import com.dmitring.yainterfaceliftdownloader.repositories.ApplicationVariableRepository
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
@@ -35,6 +36,7 @@ class NewPictureFoundHandlerServiceImplTest {
     def pictureRepository
     def applicationVariablesRepository
     def downloadManager
+    def pictureHandler
 
     def newPictureFoundHandler
 
@@ -53,9 +55,10 @@ class NewPictureFoundHandlerServiceImplTest {
         pictureRepository = mock(PictureRepository.class)
         applicationVariablesRepository = mock(ApplicationVariableRepository.class)
         downloadManager = mock(PictureDownloadManager.class)
+        pictureHandler = mock(PictureHandler.class)
 
-        newPictureFoundHandler = new NewPictureFoundHandlerServiceImpl(
-                pictureRepository, applicationVariablesRepository, downloadManager, maxSuccessCountInARow)
+        newPictureFoundHandler = new NewPictureFoundHandlerServiceImpl(pictureRepository, applicationVariablesRepository,
+                downloadManager, pictureHandler, maxSuccessCountInARow)
     }
 
     @Test

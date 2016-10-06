@@ -1,5 +1,7 @@
 package com.dmitring.yainterfaceliftdownloader.domain
 
+import com.dmitring.yainterfaceliftdownloader.domain.impl.PictureErrorfulCheckerImpl
+import com.dmitring.yainterfaceliftdownloader.domain.impl.PictureHandlerImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,35 +13,24 @@ import static org.junit.Assert.assertTrue
 import static org.mockito.Mockito.spy
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = PictureHandlerTest.class)
-class PictureHandlerTest {
+@SpringBootTest(classes = PictureHandlerImplTest.class)
+class PictureHandlerImplTest {
     class PictureState {
-        def status;
-        def thumbnailIsBroken;
-        def fullPictureIsBroken;
+        def status
+        def thumbnailIsBroken
+        def fullPictureIsBroken
     }
 
-    def pictureHandler;
-    def spyErrorfulChecker;
-    def manyTimes = 1000;
+    def testPictureFactory = new TestPictureFactory()
+    def manyTimes = 1000
+
+    def pictureHandler
+    def spyErrorfulChecker
 
     @Before
     void setUp() {
-        spyErrorfulChecker = spy(PictureErrorfulChecker.class);
-        pictureHandler = new PictureHandler(spyErrorfulChecker);
-    }
-
-    def createPicture() {
-        return new InterfaceliftPicture("safePicturesId", "safePictures", "test://thumbnail", "test://fullPicture");
-    }
-
-    def createPictureWithBrokenState(def thumbnailBroken, def fullPictureBroken) {
-        def picture = createPicture();
-        if (thumbnailBroken)
-            picture.getThumbnail().setBroken(true);
-        if (fullPictureBroken)
-            picture.getFullPicture().setBroken(true);
-        return picture;
+        spyErrorfulChecker = spy(PictureErrorfulCheckerImpl.class)
+        pictureHandler = new PictureHandlerImpl(spyErrorfulChecker)
     }
 
     def getAllBrokenPermutationsMap() {
@@ -50,15 +41,9 @@ class PictureHandlerTest {
                 [true, true],
         ]
         def brokenPictureMap = brokenPermutations.collectEntries({
-            brokenState -> [brokenState, createPictureWithBrokenState(brokenState)]});
+            brokenState -> [brokenState, testPictureFactory.createPictureWithBrokenState(brokenState)]});
 
         return brokenPictureMap;
-    }
-
-    def createPictureWithStatus(def status) {
-        def picture = createPicture();
-        picture.setStatus(status);
-        return picture;
     }
 
     def getAllStatusesAndBrokenPermutations() {
@@ -142,8 +127,8 @@ class PictureHandlerTest {
     void testHandleThumbnailFailedDownload() {
         // arrange
         def allStatusesAndBrokenPermutations = getAllStatusesAndBrokenPermutations()
-        def onceFailedPicture = createPictureWithStatus(PictureStatus.JUST_FOUND)
-        def manyManyTimesFailedPicture = createPictureWithStatus(PictureStatus.JUST_FOUND)
+        def onceFailedPicture = testPictureFactory.createPictureWithStatus(PictureStatus.JUST_FOUND)
+        def manyManyTimesFailedPicture = testPictureFactory.createPictureWithStatus(PictureStatus.JUST_FOUND)
         def manyManyTimesFailedPictureBeforeFailed
 
         // act
@@ -233,8 +218,8 @@ class PictureHandlerTest {
     void testHandleFullPictureFailedDownload() {
         // arrange
         def allStatusesAndBrokenPermutations = getAllStatusesAndBrokenPermutations()
-        def onceFailedPicture = createPictureWithStatus(PictureStatus.ACCEPTED)
-        def manyManyTimesFailedPicture = createPictureWithStatus(PictureStatus.ACCEPTED)
+        def onceFailedPicture = testPictureFactory.createPictureWithStatus(PictureStatus.ACCEPTED)
+        def manyManyTimesFailedPicture = testPictureFactory.createPictureWithStatus(PictureStatus.ACCEPTED)
         def manyManyTimesFailedPictureBeforeFailed
 
         // act

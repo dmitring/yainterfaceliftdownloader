@@ -14,17 +14,17 @@ import java.util.logging.Logger;
 public class ServeDownloadPicturesConfig extends WebMvcConfigurerAdapter {
     private static final Logger log = Logger.getLogger(ServeDownloadPicturesConfig.class.getName());
 
-    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.thumbnailPrefixPath}'+'/'}")
-    private String thumbnailPath = "/thumbnails/";
+    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.thumbnailPrefixPath}'}")
+    private String thumbnailPath/* = "/thumbnails/"*/;
 
-    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.fullPicturePrefixPath}'+'/'}")
-    private String fullPicturesPath = "/fullPictures/";
+    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.fullPicturePrefixPath}'}")
+    private String fullPicturesPath/* = "/fullPictures/"*/;
 
-    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.downloadUrlPrefix}' + '/' + '${com.dmitring.yainterfaceliftdownloader.thumbnailPrefixPath}'+'/'}")
-    private String thumbnailUriPath = "/downloaded/thumbnails/*";
+    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.downloadUrlPrefix}' + '${com.dmitring.yainterfaceliftdownloader.thumbnailPrefixPath}'}")
+    private String thumbnailUriPath/* = "/downloaded/thumbnails/*"*/;
 
-    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.downloadUrlPrefix}' + '/' + '${com.dmitring.yainterfaceliftdownloader.fullPicturePrefixPath}'+'/'}")
-    private String fullPicturesUriPath = "/downloaded/fullPictures/*";
+    @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.downloadUrlPrefix}' + '${com.dmitring.yainterfaceliftdownloader.fullPicturePrefixPath}'}")
+    private String fullPicturesUriPath/* = "/downloaded/fullPictures/*"*/;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

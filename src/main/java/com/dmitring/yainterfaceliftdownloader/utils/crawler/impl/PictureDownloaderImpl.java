@@ -39,6 +39,7 @@ public class PictureDownloaderImpl implements PictureDownloader {
 
             return false;
         }
+        log.info(String.format("A picture has been just downloaded, fileName: %s", destinationFilePath));
 
         return true;
     }

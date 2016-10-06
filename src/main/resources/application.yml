@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:derby:./database/yainterfaceliftdownloader
+    url: jdbc:derby:./database/yainterfaceliftdownloader;create=true
     username: derby
     password: nopassword
   jpa:
@@ -23,9 +23,9 @@ logging:
 com:
   dmitring:
     yainterfaceliftdownloader:
-      downloadUrlPrefix: downloaded
-      thumbnailPrefixPath: thumbnails
-      fullPicturePrefixPath: fullPictures
+      downloadUrlPrefix: downloaded/
+      thumbnailPrefixPath: thumbnails/
+      fullPicturePrefixPath: fullPictures/
       pictureFileExtension: .jpg
       interfaceliftPageUrlPattern: "https://interfacelift.com/wallpaper/downloads/date/wide_16:9/1920x1080/index%d.html"
       urlConnectionTimeout: 3000

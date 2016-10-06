@@ -3,6 +3,7 @@ package com.dmitring.yainterfaceliftdownloader.services
 import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.Picture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureStatus
+import com.dmitring.yainterfaceliftdownloader.domain.TestPictureFactory
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
 import com.dmitring.yainterfaceliftdownloader.services.impl.PicturesRepairingServiceImpl
 import com.dmitring.yainterfaceliftdownloader.utils.hashsum.PictureHashsumProvider
@@ -22,14 +23,15 @@ import static org.mockito.Mockito.*
 @SpringBootTest(classes = PicturesRepairingServiceImplTest.class)
 class PicturesRepairingServiceImplTest {
 
+    def etalonHashsum = new String("etalonHashsum")
+    def brokenHashsum = new String("brokeHashsum")
+    def testPictureFactory = new TestPictureFactory()
+
     def pictureRepository
     def downloadManager
     def pictureHashsumProvider
 
     def picturesRepairingService
-
-    def etalonHashsum = new String("etalonHashsum")
-    def brokenHashsum = new String("brokeHashsum")
 
     @Before
     void setUp() {
@@ -43,21 +45,16 @@ class PicturesRepairingServiceImplTest {
                 pictureRepository, downloadManager, pictureHashsumProvider)
     }
 
-    def createPicture(def status, def prefix, def hashsum) {
-        def picture = new InterfaceliftPicture(
-                prefix + "Picture",
-                prefix + "PictureTittle",
-                "test://" + prefix + "Thumbnail",
-                "test://" + prefix + "FullPicture")
-        picture.setStatus(status)
+    def createPicture(def status, def hashsum) {
+        def picture = testPictureFactory.createPictureWithStatus(status)
         picture.getThumbnail().setFileMd5HexHash(hashsum)
         picture.getFullPicture().setFileMd5HexHash(hashsum)
         return picture
     }
 
     def createSafeAndBrokenPicture(def pictureStatus) {
-        def safePicture = createPicture(pictureStatus, "safe", etalonHashsum)
-        def brokenPicture = createPicture(pictureStatus, "broken", brokenHashsum)
+        def safePicture = createPicture(pictureStatus, etalonHashsum)
+        def brokenPicture = createPicture(pictureStatus, brokenHashsum)
         return [safePicture, brokenPicture]
     }
 

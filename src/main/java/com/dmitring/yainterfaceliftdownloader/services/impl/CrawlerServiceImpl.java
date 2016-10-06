@@ -48,7 +48,7 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     private void crawl() {
-        int pageNumber = 0;
+        int pageNumber = 1;
         while (isRunning.get() && handleSinglePage(pageNumber)) {
             pageNumber++;
         }

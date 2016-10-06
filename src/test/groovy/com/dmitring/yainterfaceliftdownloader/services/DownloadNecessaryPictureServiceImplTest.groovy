@@ -1,7 +1,7 @@
 package com.dmitring.yainterfaceliftdownloader.services
 
-import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureStatus
+import com.dmitring.yainterfaceliftdownloader.domain.TestPictureFactory
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
 import com.dmitring.yainterfaceliftdownloader.services.impl.DownloadNecessaryPictureServiceImpl
 import org.junit.Before
@@ -20,9 +20,10 @@ import static org.mockito.Mockito.*
 @SpringBootTest(classes = DownloadNecessaryPictureServiceImplTest.class)
 class DownloadNecessaryPictureServiceImplTest {
 
+    def testPictureFactory = new TestPictureFactory()
+
     def pictureRepository
     def downloadManager
-
     def downloadNecessaryPictureService
 
     @Before
@@ -36,8 +37,7 @@ class DownloadNecessaryPictureServiceImplTest {
     @Test
     void testShouldDownloadThumbnailOnJustFoundPicture() {
         // arrange
-        def sourcePicture = new InterfaceliftPicture("someId", "someTittle", "test://thumbnailUrl", "test://fullPictureUrl")
-        sourcePicture.setStatus(PictureStatus.JUST_FOUND)
+        def sourcePicture = testPictureFactory.createPictureWithStatus(PictureStatus.JUST_FOUND);
         when(pictureRepository.findByStatusIn(any(Collection.class))).thenReturn([sourcePicture])
 
         // act
@@ -50,8 +50,7 @@ class DownloadNecessaryPictureServiceImplTest {
     @Test
     void testShouldDownloadFullPictureOnAcceptedPicture() {
         // arrange
-        def sourcePicture = new InterfaceliftPicture("someId", "someTittle", "test://thumbnailUrl", "test://fullPictureUrl")
-        sourcePicture.setStatus(PictureStatus.ACCEPTED)
+        def sourcePicture = testPictureFactory.createPictureWithStatus(PictureStatus.ACCEPTED);
         when(pictureRepository.findByStatusIn(any(Collection.class))).thenReturn([sourcePicture])
 
         // act

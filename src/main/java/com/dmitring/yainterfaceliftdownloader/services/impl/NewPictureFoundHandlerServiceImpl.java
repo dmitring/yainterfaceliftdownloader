@@ -2,6 +2,7 @@ package com.dmitring.yainterfaceliftdownloader.services.impl;
 
 import com.dmitring.yainterfaceliftdownloader.domain.ApplicationVariable;
 import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture;
+import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler;
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo;
 import com.dmitring.yainterfaceliftdownloader.repositories.ApplicationVariableRepository;
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository;
@@ -22,6 +23,7 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
     private static final Logger log = Logger.getLogger(NewPictureFoundHandlerServiceImpl.class.getName());
     private static final String CRAWLING_FINISHED_KEY = "CRAWLING_FINISHED";
 
+    private final PictureHandler pictureHandler;
     private final PictureRepository pictureRepository;
     private final ApplicationVariableRepository applicationVariables;
     private final PictureDownloadManager downloadManager;
@@ -34,10 +36,12 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
     public NewPictureFoundHandlerServiceImpl(PictureRepository pictureRepository,
                                              ApplicationVariableRepository applicationVariables,
                                              PictureDownloadManager downloadManager,
+                                             PictureHandler pictureHandler,
                                              @Value("${com.dmitring.yainterfaceliftdownloader.successCountInARow}") int maxSuccessCountInARow) {
         this.pictureRepository = pictureRepository;
         this.applicationVariables = applicationVariables;
         this.downloadManager = downloadManager;
+        this.pictureHandler = pictureHandler;
         this.maxSuccessCountInARow = maxSuccessCountInARow;
 
         crawlingFinished = new AtomicBoolean(Boolean.FALSE);
@@ -69,7 +73,8 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
         }
 
         successCountInARow.set(0);
-        picture = new InterfaceliftPicture(pictureInfo.getId(), pictureInfo.getTitle(), pictureInfo.getThumbnailUrlString(), pictureInfo.getFullUrlString());
+        picture = pictureHandler.createNewPicture(pictureInfo.getId(), pictureInfo.getTitle(),
+                pictureInfo.getThumbnailUrlString(), pictureInfo.getFullUrlString());
         pictureRepository.save(picture);
         downloadManager.downloadThumbnail(picture);
     }

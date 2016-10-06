@@ -44,13 +44,6 @@ public class InterfaceliftPicture
     @Embedded
     private Picture fullPicture;
 
-    public InterfaceliftPicture(String id, String tittle, String thumbnailUrl, String fullPictureUrl) {
-        this.interfaceliftId = id;
-        this.title = tittle;
-        this.thumbnail = new Picture(thumbnailUrl);
-        this.fullPicture = new Picture(fullPictureUrl);
-    }
-
     public void increaseErrorCount() {
         errorCount++;
     }

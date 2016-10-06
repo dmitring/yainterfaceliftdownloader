@@ -1,8 +1,9 @@
 package com.dmitring.yainterfaceliftdownloader.services
 
-import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture
 import com.dmitring.yainterfaceliftdownloader.domain.Picture
 import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler
+import com.dmitring.yainterfaceliftdownloader.domain.TestPictureFactory
+import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
 import com.dmitring.yainterfaceliftdownloader.services.impl.PictureDownloadManagerImpl
 import com.dmitring.yainterfaceliftdownloader.utils.AssertFutureUtil
 import com.dmitring.yainterfaceliftdownloader.utils.DownloadingPictureTaskManager
@@ -24,11 +25,13 @@ import static org.mockito.Mockito.*
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PictureDownloadManagerImplTest.class)
 class PictureDownloadManagerImplTest {
-    def etalonHashsum
+    def etalonHashsum = new String("someHashsumInHex")
+    def testPictureFactory = new TestPictureFactory();
 
     def mockPictureHashsumProvider
     def mockPictureHandler
     def mockPictureDownloader
+    def mockPictureRepository
     def downloadingPictureTaskManager
     def picture
 
@@ -54,17 +57,16 @@ class PictureDownloadManagerImplTest {
 
     @Before
     void setUp() {
-        etalonHashsum = new String("someHashsumInHex")
-
         mockPictureHashsumProvider = mock(PictureHashsumProvider.class)
         when(mockPictureHashsumProvider.getHashsum(any(Picture.class))).thenReturn(etalonHashsum)
         mockPictureHandler = mock(PictureHandler.class)
         mockPictureDownloader = mock(PictureDownloader.class)
+        mockPictureRepository = mock(PictureRepository.class)
         downloadingPictureTaskManager = new StubDownloadingPictureTaskManager()
-        picture = new InterfaceliftPicture("pictureId", "pictureTittle", "test://pictureThumbnail", "test://fullPicture")
+        picture = testPictureFactory.createPicture();
 
-        pictureDownloadManager = new PictureDownloadManagerImpl(
-                mockPictureHashsumProvider, mockPictureHandler, mockPictureDownloader, downloadingPictureTaskManager)
+        pictureDownloadManager = new PictureDownloadManagerImpl(mockPictureRepository, mockPictureHashsumProvider,
+                mockPictureHandler, mockPictureDownloader, downloadingPictureTaskManager)
     }
 
     @Test
@@ -77,7 +79,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, true, 100)
-        verify(mockPictureHandler).handleThumbnailSuccessDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleThumbnailSuccessDownload(picture)
+        verify(mockPictureRepository).save(picture)
         assertSame(etalonHashsum, picture.getThumbnail().getFileMd5HexHash())
     }
 
@@ -91,7 +94,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, false, 100)
-        verify(mockPictureHandler).handleThumbnailFailedDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleThumbnailFailedDownload(picture)
+        verify(mockPictureRepository).save(picture)
     }
 
     @Test
@@ -104,7 +108,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, true, 100)
-        verify(mockPictureHandler).handleFullPictureSuccessDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleFullPictureSuccessDownload(picture)
+        verify(mockPictureRepository).save(picture)
         assertSame(etalonHashsum, picture.getFullPicture().getFileMd5HexHash())
     }
 
@@ -118,7 +123,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, false, 100)
-        verify(mockPictureHandler).handleFullPictureFailedDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleFullPictureFailedDownload(picture)
+        verify(mockPictureRepository).save(picture)
     }
 
     @Test
@@ -131,7 +137,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, true, 100)
-        verify(mockPictureHandler).handleThumbnailSuccessRepair(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleThumbnailSuccessRepair(picture)
+        verify(mockPictureRepository).save(picture)
         assertSame(etalonHashsum, picture.getThumbnail().getFileMd5HexHash())
     }
 
@@ -145,7 +152,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, false, 100)
-        verify(mockPictureHandler).handleThumbnailFailedDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleThumbnailFailedDownload(picture)
+        verify(mockPictureRepository).save(picture)
     }
 
     @Test
@@ -158,7 +166,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, true, 100)
-        verify(mockPictureHandler).handleFullPictureSuccessRepair(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleFullPictureSuccessRepair(picture)
+        verify(mockPictureRepository).save(picture)
         assertSame(etalonHashsum, picture.getFullPicture().getFileMd5HexHash())
     }
 
@@ -172,7 +181,8 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, false, 100)
-        verify(mockPictureHandler).handleFullPictureFailedDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleFullPictureFailedDownload(picture)
+        verify(mockPictureRepository).save(picture)
     }
 
     @Test
@@ -185,6 +195,7 @@ class PictureDownloadManagerImplTest {
 
         // assert
         AssertFutureUtil.getAndAssert(downloadResult, false, 100)
-        verify(mockPictureHandler).handleFullPictureFailedDownload(any(InterfaceliftPicture.class))
+        verify(mockPictureHandler).handleFullPictureFailedDownload(picture)
+        verify(mockPictureRepository).save(picture)
     }
 }
