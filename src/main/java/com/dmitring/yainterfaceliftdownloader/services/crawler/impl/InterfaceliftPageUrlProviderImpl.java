@@ -1,6 +1,6 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler.impl;
+package com.dmitring.yainterfaceliftdownloader.services.crawler.impl;
 
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.InterfaceliftPageUrlProvider;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.InterfaceliftPageUrlProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

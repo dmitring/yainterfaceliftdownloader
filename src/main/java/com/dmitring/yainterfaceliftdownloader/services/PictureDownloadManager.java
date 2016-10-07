@@ -4,6 +4,9 @@ import com.dmitring.yainterfaceliftdownloader.domain.InterfaceliftPicture;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Provides functions to asynchronously download and repair pictures. Also provides routines to cancel tasks.
+ */
 public interface PictureDownloadManager {
     CompletableFuture<Boolean> downloadThumbnail(InterfaceliftPicture picture);
     CompletableFuture<Boolean> downloadFullPicture(InterfaceliftPicture picture);

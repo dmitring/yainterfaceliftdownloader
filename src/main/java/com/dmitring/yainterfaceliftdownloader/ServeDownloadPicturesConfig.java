@@ -15,16 +15,16 @@ public class ServeDownloadPicturesConfig extends WebMvcConfigurerAdapter {
     private static final Logger log = Logger.getLogger(ServeDownloadPicturesConfig.class.getName());
 
     @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.thumbnailPrefixPath}'}")
-    private String thumbnailPath/* = "/thumbnails/"*/;
+    private String thumbnailPath;
 
     @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.fullPicturePrefixPath}'}")
-    private String fullPicturesPath/* = "/fullPictures/"*/;
+    private String fullPicturesPath;
 
     @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.downloadUrlPrefix}' + '${com.dmitring.yainterfaceliftdownloader.thumbnailPrefixPath}'}")
-    private String thumbnailUriPath/* = "/downloaded/thumbnails/*"*/;
+    private String thumbnailUriPath;
 
     @Value("#{'/'+'${com.dmitring.yainterfaceliftdownloader.downloadUrlPrefix}' + '${com.dmitring.yainterfaceliftdownloader.fullPicturePrefixPath}'}")
-    private String fullPicturesUriPath/* = "/downloaded/fullPictures/*"*/;
+    private String fullPicturesUriPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -32,6 +32,6 @@ public class ServeDownloadPicturesConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler(thumbnailUriPath).addResourceLocations("file:" + prefix + thumbnailPath);
         registry.addResourceHandler(fullPicturesUriPath).addResourceLocations("file:" + prefix + fullPicturesPath);
         super.addResourceHandlers(registry);
-        log.fine(String.format("Request filter %s, %s has been registered", thumbnailUriPath, fullPicturesUriPath));
+        log.info(String.format("Request filter %s, %s has been registered", thumbnailUriPath, fullPicturesUriPath));
     }
 }

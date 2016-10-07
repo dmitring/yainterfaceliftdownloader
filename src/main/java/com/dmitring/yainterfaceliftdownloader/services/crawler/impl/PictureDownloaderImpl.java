@@ -1,6 +1,6 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler.impl;
+package com.dmitring.yainterfaceliftdownloader.services.crawler.impl;
 
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.PictureDownloader;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.PictureDownloader;
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.PictureStreamProvider;
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.UrlStreamProvider;
 import org.apache.commons.io.IOUtils;
@@ -32,10 +32,9 @@ public class PictureDownloaderImpl implements PictureDownloader {
         try {
             doCopy(sourceUrl, destinationFilePath);
         } catch (Exception e) {
+            log.warning(String.format("Could not download and save a picture by url %s, filename %s, because of the " +
+                            "reason: %s", sourceUrl, destinationFilePath, e.getMessage()));
             tryDeleteFile(destinationFilePath);
-            log.warning(String.format("Could not download and save a picture by url %s," +
-                            "filename %s, because of the reason: %s",
-                    sourceUrl, destinationFilePath, e.getMessage()));
 
             return false;
         }

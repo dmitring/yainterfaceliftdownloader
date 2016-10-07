@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * It's common domain application class. It representsa interfacelift picture.
+ */
 @Entity
 @Access(AccessType.FIELD)
 @Data

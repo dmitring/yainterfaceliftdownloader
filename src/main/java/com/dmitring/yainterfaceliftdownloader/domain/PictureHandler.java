@@ -1,5 +1,8 @@
 package com.dmitring.yainterfaceliftdownloader.domain;
 
+/**
+ * The interface offers actions and transformations on InterfaceliftPicture class
+ */
 public interface PictureHandler {
     InterfaceliftPicture createNewPicture(String id, String tittle, String thumbnailUrl, String fullPictureUrl);
     void handleThumbnailSuccessDownload(InterfaceliftPicture picture);

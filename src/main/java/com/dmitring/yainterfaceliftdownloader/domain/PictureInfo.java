@@ -2,6 +2,9 @@ package com.dmitring.yainterfaceliftdownloader.domain;
 
 import lombok.Data;
 
+/**
+ * It's a class to represent parsed picture info
+ */
 @Data
 public class PictureInfo {
     private final String id;

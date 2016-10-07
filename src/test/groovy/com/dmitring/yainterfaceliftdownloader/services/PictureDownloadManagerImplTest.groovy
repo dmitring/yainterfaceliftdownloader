@@ -6,8 +6,7 @@ import com.dmitring.yainterfaceliftdownloader.domain.TestPictureFactory
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
 import com.dmitring.yainterfaceliftdownloader.services.impl.PictureDownloadManagerImpl
 import com.dmitring.yainterfaceliftdownloader.utils.AssertFutureUtil
-import com.dmitring.yainterfaceliftdownloader.utils.DownloadingPictureTaskManager
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.PictureDownloader
+import com.dmitring.yainterfaceliftdownloader.services.crawler.PictureDownloader
 import com.dmitring.yainterfaceliftdownloader.utils.hashsum.PictureHashsumProvider
 import org.junit.Before
 import org.junit.Test
@@ -39,13 +38,13 @@ class PictureDownloadManagerImplTest {
 
     static class StubDownloadingPictureTaskManager implements DownloadingPictureTaskManager {
         @Override
-        CompletableFuture<Boolean> putTask(String taskId, Supplier<Boolean> task) {
-            Boolean result = task.get();
+        CompletableFuture<Boolean> run(String taskId, Supplier<Boolean> taskRoutine) {
+            Boolean result = taskRoutine.get();
             return CompletableFuture.<Boolean>completedFuture(result);
         }
 
         @Override
-        void ensureCancelTask(String taskId) {
+        void tryCancelTask(String taskId) {
 
         }
 

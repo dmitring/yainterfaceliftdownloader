@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 
 @Component
-public class PictureStreamProviderImpl implements PictureStreamProvider {
+public class PictureFileStreamProvider implements PictureStreamProvider {
     @Override
     public InputStream getInputStream(Picture picture) throws IOException {
         final String pictureFilePath = picture.getFilePath();

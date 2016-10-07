@@ -5,8 +5,8 @@ import com.dmitring.yainterfaceliftdownloader.domain.Picture;
 import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler;
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository;
 import com.dmitring.yainterfaceliftdownloader.services.PictureDownloadManager;
-import com.dmitring.yainterfaceliftdownloader.utils.DownloadingPictureTaskManager;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.PictureDownloader;
+import com.dmitring.yainterfaceliftdownloader.services.DownloadingPictureTaskManager;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.PictureDownloader;
 import com.dmitring.yainterfaceliftdownloader.utils.hashsum.PictureHashsumProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -112,7 +112,7 @@ public class PictureDownloadManagerImpl implements PictureDownloadManager {
                                                 String destinationFilePath,
                                                 Runnable onComplete,
                                                 Runnable onFail) {
-        CompletableFuture<Boolean> downloadingTask = pictureTaskManager.putTask(
+        CompletableFuture<Boolean> downloadingTask = pictureTaskManager.run(
                 sourceUrl,
                 () -> downloadRoutine(sourceUrl, destinationFilePath)
         );
@@ -134,7 +134,7 @@ public class PictureDownloadManagerImpl implements PictureDownloadManager {
 
     @Override
     public void ensureCancelDownloadFullPicture(InterfaceliftPicture canceling) {
-        pictureTaskManager.ensureCancelTask(canceling.getFullPicture().getDownloadUrl());
+        pictureTaskManager.tryCancelTask(canceling.getFullPicture().getDownloadUrl());
     }
 
     @PreDestroy

@@ -4,7 +4,7 @@ import com.dmitring.yainterfaceliftdownloader.domain.ParsedPage
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
 import com.dmitring.yainterfaceliftdownloader.services.impl.CrawlerServiceImpl
 import com.dmitring.yainterfaceliftdownloader.utils.AssertFutureUtil
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.PageCrawler
+import com.dmitring.yainterfaceliftdownloader.services.crawler.PageCrawler
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +29,7 @@ class CrawlerServiceImplTest {
 
     @Before
     void setUp() {
-        pictureFoundHandler = mock(NewPictureFoundHandlerService.class)
+        pictureFoundHandler = mock(CrawledPicturesHandler.class)
         pageCrawler = mock(PageCrawler.class)
         maxAttemptCount = 1
         crawlerService = new CrawlerServiceImpl(pictureFoundHandler, pageCrawler, maxAttemptCount)

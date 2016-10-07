@@ -1,6 +1,6 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler.impl;
+package com.dmitring.yainterfaceliftdownloader.services.crawler.impl;
 
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.WebPageDownloader;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.WebPageDownloader;
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.UrlStreamProvider;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;

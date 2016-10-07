@@ -6,7 +6,7 @@ import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
 import com.dmitring.yainterfaceliftdownloader.repositories.ApplicationVariableRepository
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository
-import com.dmitring.yainterfaceliftdownloader.services.impl.NewPictureFoundHandlerServiceImpl
+import com.dmitring.yainterfaceliftdownloader.services.impl.CrawledPicturesHandlerImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,8 +21,8 @@ import static org.mockito.Mockito.*
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         properties = "com.dmitring.yainterfaceliftdownloader.successCountInARow = 10",
-        classes = NewPictureFoundHandlerServiceImplTest.class)
-class NewPictureFoundHandlerServiceImplTest {
+        classes = CrawledPicturesHandlerImplTest.class)
+class CrawledPicturesHandlerImplTest {
 
     def maxSuccessCountInARow
     def rawCrawlFinishedFalse
@@ -57,7 +57,7 @@ class NewPictureFoundHandlerServiceImplTest {
         downloadManager = mock(PictureDownloadManager.class)
         pictureHandler = mock(PictureHandler.class)
 
-        newPictureFoundHandler = new NewPictureFoundHandlerServiceImpl(pictureRepository, applicationVariablesRepository,
+        newPictureFoundHandler = new CrawledPicturesHandlerImpl(pictureRepository, applicationVariablesRepository,
                 downloadManager, pictureHandler, maxSuccessCountInARow)
     }
 
@@ -84,12 +84,12 @@ class NewPictureFoundHandlerServiceImplTest {
 
         // act
         newPictureFoundHandler.init()
-        def shouldContinueZeroHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueZeroHandled = newPictureFoundHandler.shouldContinueCrawling()
         newPictureFoundHandler.handleImage(knownMockPictureInfo)
-        def shouldContinueOneHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueOneHandled = newPictureFoundHandler.shouldContinueCrawling()
         for (def i in 2..maxSuccessCountInARow*2)
             newPictureFoundHandler.handleImage(knownMockPictureInfo)
-        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinueCrawling()
 
         // assert
         assertTrue(shouldContinueZeroHandled)
@@ -105,12 +105,12 @@ class NewPictureFoundHandlerServiceImplTest {
 
         // act
         newPictureFoundHandler.init()
-        def shouldContinueZeroHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueZeroHandled = newPictureFoundHandler.shouldContinueCrawling()
         newPictureFoundHandler.handleImage(knownMockPictureInfo)
-        def shouldContinueOneHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueOneHandled = newPictureFoundHandler.shouldContinueCrawling()
         for (def i in 2..maxSuccessCountInARow)
             newPictureFoundHandler.handleImage(knownMockPictureInfo)
-        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinueCrawling()
 
         // assert
         assertTrue(shouldContinueZeroHandled)
@@ -132,7 +132,7 @@ class NewPictureFoundHandlerServiceImplTest {
         newPictureFoundHandler.handleImage(unknownMockPictureInfo)
         for (def i in maxSuccessCountInARow/2..maxSuccessCountInARow)
             newPictureFoundHandler.handleImage(knownMockPictureInfo)
-        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinueCrawling()
 
         // assert
         assertTrue(shouldContinueEnoughHandled)
@@ -152,7 +152,7 @@ class NewPictureFoundHandlerServiceImplTest {
         newPictureFoundHandler.handleImage(unknownMockPictureInfo)
         for (def i in 1..maxSuccessCountInARow)
             newPictureFoundHandler.handleImage(knownMockPictureInfo)
-        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinue()
+        def shouldContinueEnoughHandled = newPictureFoundHandler.shouldContinueCrawling()
 
         // assert
         assertFalse(shouldContinueEnoughHandled)
@@ -165,7 +165,7 @@ class NewPictureFoundHandlerServiceImplTest {
 
         // act
         newPictureFoundHandler.init()
-        newPictureFoundHandler.handleFinish()
+        newPictureFoundHandler.handleCrawlingFinish()
 
         // assert
         ArgumentCaptor<ApplicationVariable> appVarsCaptor = ArgumentCaptor.forClass(ApplicationVariable.class);

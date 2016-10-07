@@ -5,6 +5,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * It's a concrete picture. There can be several pictures in InterfaceliftPictures. They can be different by resolution.
+ * Now there are only thumbnail and fullPicture in InterfaceliftPicture.
+ */
 @Embeddable
 @Access(AccessType.FIELD)
 @Data

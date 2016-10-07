@@ -37,9 +37,9 @@ public class PicturesRepairingServiceImpl implements PicturesRepairingService {
     @Scheduled(fixedDelayString = "${com.dmitring.yainterfaceliftdownloader.checkIntegrityDelay}")
     @Transactional
     @Override
-    public void checkPictureHashsums() {
-        log.fine("The picture repairing process has started");
-        final CompletableFuture<?>[] results = pictureRepository.findByStatusIn(Arrays.asList(
+    public void checkAndRepairPictures() {
+        log.info("The picture repairing process has started");
+        final CompletableFuture[] results = pictureRepository.findByStatusIn(Arrays.asList(
                 PictureStatus.CONSIDERING,
                 PictureStatus.ACCEPTED,
                 PictureStatus.REJECTED,
@@ -47,35 +47,29 @@ public class PicturesRepairingServiceImpl implements PicturesRepairingService {
             .stream()
             .map(this::checkSinglePicture)
             .toArray(CompletableFuture[]::new);
-        final CompletableFuture<Void> result = CompletableFuture.allOf(results);
-        result.thenRun(() -> log.fine("The picture repairing process has stopped"));
+        final CompletableFuture result = CompletableFuture.allOf(results);
+        result.thenRun(() -> log.info("The picture repairing process has stopped"));
         result.join();
     }
 
-    private CompletableFuture<Void> checkSinglePicture(InterfaceliftPicture picture) {
-        CompletableFuture<Void> result = handleCertainPicture(picture, picture.getThumbnail(), downloadManager::repairThumbnail);
+    private CompletableFuture checkSinglePicture(InterfaceliftPicture picture) {
+        CompletableFuture result = handleCertainPicture(picture, picture.getThumbnail(), downloadManager::repairThumbnail);
         if (picture.getStatus() == PictureStatus.DOWNLOADED) {
-            result = CompletableFuture.allOf(result,
+            result = CompletableFuture.allOf(
+                    result,
                     handleCertainPicture(picture, picture.getFullPicture(), downloadManager::repairFullPicture));
         }
         return result;
     }
 
-    private CompletableFuture<Void> handleCertainPicture(InterfaceliftPicture picture,
-                                      Picture certainPictureToHandle,
+    private CompletableFuture handleCertainPicture(InterfaceliftPicture picture, Picture certainPictureToHandle,
                                       Function<InterfaceliftPicture, CompletableFuture<Boolean>> downloadRoutine) {
         if (isPictureCheckSumCorrect(certainPictureToHandle))
             return CompletableFuture.completedFuture(null);
 
         log.warning(String.format("The picture has incorrect hashsum %s, it will be redownloaded", picture.toString()));
         certainPictureToHandle.setBroken(true);
-        final CompletableFuture<Void> resultFuture = downloadRoutine.apply(picture).thenAccept(result -> {
-            if (result) {
-                certainPictureToHandle.setBroken(false);
-                pictureRepository.save(picture);
-            }
-        });
-        return resultFuture;
+        return downloadRoutine.apply(picture);
     }
 
     private boolean isPictureCheckSumCorrect(Picture picture) {

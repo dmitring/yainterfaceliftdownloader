@@ -1,6 +1,6 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler
+package com.dmitring.yainterfaceliftdownloader.services.crawler
 
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.impl.PictureDownloaderImpl
+import com.dmitring.yainterfaceliftdownloader.services.crawler.impl.PictureDownloaderImpl
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.PictureStreamProvider
 import com.dmitring.yainterfaceliftdownloader.utils.pictureStreams.UrlStreamProvider
 import org.junit.Test

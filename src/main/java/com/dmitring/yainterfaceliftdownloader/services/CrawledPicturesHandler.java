@@ -2,9 +2,11 @@ package com.dmitring.yainterfaceliftdownloader.services;
 
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo;
 
-public interface NewPictureFoundHandlerService {
-    void init();
+/**
+ * Handle crawled pictures
+ */
+public interface CrawledPicturesHandler {
     void handleImage(PictureInfo pictureInfo);
-    boolean shouldContinue();
-    void handleFinish();
+    boolean shouldContinueCrawling();
+    void handleCrawlingFinish();
 }

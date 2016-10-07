@@ -1,10 +1,10 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler.impl;
+package com.dmitring.yainterfaceliftdownloader.services.crawler.impl;
 
 import com.dmitring.yainterfaceliftdownloader.domain.ParsedPage;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.InterfaceliftPageParser;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.InterfaceliftPageUrlProvider;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.PageCrawler;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.WebPageDownloader;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.InterfaceliftPageParser;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.InterfaceliftPageUrlProvider;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.PageCrawler;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.WebPageDownloader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +35,7 @@ public class PageCrawlerImpl implements PageCrawler {
             String pageUrl = pageUrlProvider.getPageUrlString(pageNumber);
             String pageContent = webPageDownloader.getWebPageContent(pageUrl);
             parsedPage = pageParser.parsePage(pageContent);
-            log.fine(String.format("Page number_%d has been successfully parsed", pageNumber));
+            log.info(String.format("Page number_%d has been successfully parsed", pageNumber));
         } catch (Exception e) {
             log.warning(String.format("Page number_%d has parsed unsuccessfully, reason: %s", pageNumber, e.getMessage()));
         }

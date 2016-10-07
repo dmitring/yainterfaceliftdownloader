@@ -1,6 +1,6 @@
-package com.dmitring.yainterfaceliftdownloader.utils.impl;
+package com.dmitring.yainterfaceliftdownloader.services.impl;
 
-import com.dmitring.yainterfaceliftdownloader.utils.DownloadingPictureTaskManager;
+import com.dmitring.yainterfaceliftdownloader.services.DownloadingPictureTaskManager;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,12 +19,12 @@ public class DownloadingPictureTaskManagerImpl implements DownloadingPictureTask
     }
 
     @Override
-    public CompletableFuture<Boolean> putTask(String taskId, Supplier<Boolean> task) {
+    public CompletableFuture<Boolean> run(String taskId, Supplier<Boolean> taskRoutine) {
         CompletableFuture<Boolean> presentTaskFuture = pendingDownloadTaskMap.putIfAbsent(taskId, fakeTaskFuture);
         if (presentTaskFuture != null)
             return null;
 
-        final CompletableFuture<Boolean> taskFuture = CompletableFuture.supplyAsync(task::get);
+        CompletableFuture<Boolean> taskFuture = CompletableFuture.supplyAsync(taskRoutine::get);
         taskFuture.handle((result, exception) -> pendingDownloadTaskMap.remove(taskId));
         pendingDownloadTaskMap.put(taskId, taskFuture);
 
@@ -32,7 +32,7 @@ public class DownloadingPictureTaskManagerImpl implements DownloadingPictureTask
     }
 
     @Override
-    public void ensureCancelTask(String taskId) {
+    public void tryCancelTask(String taskId) {
         pendingDownloadTaskMap.computeIfPresent(taskId,
                 ((id, taskFuture) -> (taskFuture.cancel(false))? null : taskFuture));
     }

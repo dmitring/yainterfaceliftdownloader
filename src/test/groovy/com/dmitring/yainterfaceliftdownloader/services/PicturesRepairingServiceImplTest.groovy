@@ -65,7 +65,7 @@ class PicturesRepairingServiceImplTest {
         when(pictureRepository.findByStatusIn(any(Collection.class))).thenReturn(sourcePictures)
 
         // act
-        picturesRepairingService.checkPictureHashsums()
+        picturesRepairingService.checkAndRepairPictures()
 
         // assert
         verify(pictureHashsumProvider, times(2)).getHashsum(any(Picture.class))
@@ -74,9 +74,6 @@ class PicturesRepairingServiceImplTest {
 
         verify(downloadManager, times(1)).repairThumbnail(any(InterfaceliftPicture.class))
         verify(downloadManager, times(1)).repairThumbnail(sourcePictures[1])
-
-        verify(pictureRepository, times(1)).save(any(InterfaceliftPicture.class))
-        verify(pictureRepository, times(1)).save(sourcePictures[1])
     }
 
     @Test
@@ -86,7 +83,7 @@ class PicturesRepairingServiceImplTest {
         when(pictureRepository.findByStatusIn(any(Collection.class))).thenReturn(sourcePictures)
 
         // act
-        picturesRepairingService.checkPictureHashsums()
+        picturesRepairingService.checkAndRepairPictures()
 
         // assert
         verify(pictureHashsumProvider, times(2)).getHashsum(any(Picture.class))
@@ -95,9 +92,6 @@ class PicturesRepairingServiceImplTest {
 
         verify(downloadManager, times(1)).repairThumbnail(any(InterfaceliftPicture.class))
         verify(downloadManager, times(1)).repairThumbnail(sourcePictures[1])
-
-        verify(pictureRepository, times(1)).save(any(InterfaceliftPicture.class))
-        verify(pictureRepository, times(1)).save(sourcePictures[1])
     }
 
     @Test
@@ -107,7 +101,7 @@ class PicturesRepairingServiceImplTest {
         when(pictureRepository.findByStatusIn(any(Collection.class))).thenReturn(sourcePictures)
 
         // act
-        picturesRepairingService.checkPictureHashsums()
+        picturesRepairingService.checkAndRepairPictures()
 
         // assert
         verify(pictureHashsumProvider, times(2)).getHashsum(any(Picture.class))
@@ -116,9 +110,6 @@ class PicturesRepairingServiceImplTest {
 
         verify(downloadManager, times(1)).repairThumbnail(any(InterfaceliftPicture.class))
         verify(downloadManager, times(1)).repairThumbnail(sourcePictures[1])
-
-        verify(pictureRepository, times(1)).save(any(InterfaceliftPicture.class))
-        verify(pictureRepository, times(1)).save(sourcePictures[1])
     }
 
     @Test
@@ -128,7 +119,7 @@ class PicturesRepairingServiceImplTest {
         when(pictureRepository.findByStatusIn(any(Collection.class))).thenReturn(sourcePictures)
 
         // act
-        picturesRepairingService.checkPictureHashsums()
+        picturesRepairingService.checkAndRepairPictures()
 
         // assert
         verify(pictureHashsumProvider, times(4)).getHashsum(any(Picture.class))
@@ -141,8 +132,5 @@ class PicturesRepairingServiceImplTest {
         verify(downloadManager, times(1)).repairThumbnail(sourcePictures[1])
         verify(downloadManager, times(1)).repairFullPicture(any(InterfaceliftPicture.class))
         verify(downloadManager, times(1)).repairFullPicture(sourcePictures[1])
-
-        verify(pictureRepository, times(2)).save(any(InterfaceliftPicture.class))
-        verify(pictureRepository, times(2)).save(sourcePictures[1])
     }
 }

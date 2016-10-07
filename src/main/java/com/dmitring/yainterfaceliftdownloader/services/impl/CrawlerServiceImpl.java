@@ -2,8 +2,8 @@ package com.dmitring.yainterfaceliftdownloader.services.impl;
 
 import com.dmitring.yainterfaceliftdownloader.domain.ParsedPage;
 import com.dmitring.yainterfaceliftdownloader.services.CrawlerService;
-import com.dmitring.yainterfaceliftdownloader.services.NewPictureFoundHandlerService;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.PageCrawler;
+import com.dmitring.yainterfaceliftdownloader.services.CrawledPicturesHandler;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.PageCrawler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,14 +16,14 @@ import java.util.logging.Logger;
 public class CrawlerServiceImpl implements CrawlerService {
     private static final Logger log = Logger.getLogger(CrawlerServiceImpl.class.getName());
 
-    private final NewPictureFoundHandlerService newPictureFoundHandler;
+    private final CrawledPicturesHandler newPictureFoundHandler;
     private final PageCrawler pageCrawler;
     private final int maxAttemptCount;
 
     private final AtomicBoolean isRunning;
 
     @Autowired
-    public CrawlerServiceImpl(NewPictureFoundHandlerService newPictureFoundHandler,
+    public CrawlerServiceImpl(CrawledPicturesHandler newPictureFoundHandler,
                               PageCrawler pageCrawler,
                               @Value("${com.dmitring.yainterfaceliftdownloader.maxCrawlerAttempts}") int maxAttemptCount) {
         this.newPictureFoundHandler = newPictureFoundHandler;
@@ -36,13 +36,13 @@ public class CrawlerServiceImpl implements CrawlerService {
     @Scheduled(fixedDelayString = "${com.dmitring.yainterfaceliftdownloader.crawlingDelay}")
     @Override
     public boolean startCrawling() {
-        log.fine("A next crawling start is planning");
+        log.info("A next crawling start is planning");
         if (isRunning.getAndSet(true)) {
             log.warning("The crawling can't start due to another crawling process is running");
             return false;
         }
 
-        log.fine("The crawling has started");
+        log.info("The crawling has started");
         crawl();
         return true;
     }
@@ -52,7 +52,7 @@ public class CrawlerServiceImpl implements CrawlerService {
         while (isRunning.get() && handleSinglePage(pageNumber)) {
             pageNumber++;
         }
-        newPictureFoundHandler.handleFinish();
+        newPictureFoundHandler.handleCrawlingFinish();
         isRunning.compareAndSet(true, false);
     }
 
@@ -69,6 +69,6 @@ public class CrawlerServiceImpl implements CrawlerService {
         if (!parsedUnsuccessfully)
             parsedPage.getPictureInfo().forEach(newPictureFoundHandler::handleImage);
 
-        return (!parsedUnsuccessfully && newPictureFoundHandler.shouldContinue() && parsedPage.isNextPageExists());
+        return (!parsedUnsuccessfully && newPictureFoundHandler.shouldContinueCrawling() && parsedPage.isNextPageExists());
     }
 }

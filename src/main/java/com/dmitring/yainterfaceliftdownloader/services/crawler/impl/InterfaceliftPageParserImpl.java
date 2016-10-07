@@ -1,8 +1,8 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler.impl;
+package com.dmitring.yainterfaceliftdownloader.services.crawler.impl;
 
 import com.dmitring.yainterfaceliftdownloader.domain.ParsedPage;
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo;
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.InterfaceliftPageParser;
+import com.dmitring.yainterfaceliftdownloader.services.crawler.InterfaceliftPageParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

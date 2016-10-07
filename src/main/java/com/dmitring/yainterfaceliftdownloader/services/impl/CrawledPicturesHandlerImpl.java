@@ -6,7 +6,7 @@ import com.dmitring.yainterfaceliftdownloader.domain.PictureHandler;
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo;
 import com.dmitring.yainterfaceliftdownloader.repositories.ApplicationVariableRepository;
 import com.dmitring.yainterfaceliftdownloader.repositories.PictureRepository;
-import com.dmitring.yainterfaceliftdownloader.services.NewPictureFoundHandlerService;
+import com.dmitring.yainterfaceliftdownloader.services.CrawledPicturesHandler;
 import com.dmitring.yainterfaceliftdownloader.services.PictureDownloadManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 @Service
-public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandlerService {
-    private static final Logger log = Logger.getLogger(NewPictureFoundHandlerServiceImpl.class.getName());
+public class CrawledPicturesHandlerImpl implements CrawledPicturesHandler {
+    private static final Logger log = Logger.getLogger(CrawledPicturesHandlerImpl.class.getName());
     private static final String CRAWLING_FINISHED_KEY = "CRAWLING_FINISHED";
 
     private final PictureHandler pictureHandler;
@@ -33,11 +33,11 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
     private AtomicInteger successCountInARow;
 
     @Autowired
-    public NewPictureFoundHandlerServiceImpl(PictureRepository pictureRepository,
-                                             ApplicationVariableRepository applicationVariables,
-                                             PictureDownloadManager downloadManager,
-                                             PictureHandler pictureHandler,
-                                             @Value("${com.dmitring.yainterfaceliftdownloader.successCountInARow}") int maxSuccessCountInARow) {
+    public CrawledPicturesHandlerImpl(PictureRepository pictureRepository,
+                                      ApplicationVariableRepository applicationVariables,
+                                      PictureDownloadManager downloadManager,
+                                      PictureHandler pictureHandler,
+                                      @Value("${com.dmitring.yainterfaceliftdownloader.successCountInARow}") int maxSuccessCountInARow) {
         this.pictureRepository = pictureRepository;
         this.applicationVariables = applicationVariables;
         this.downloadManager = downloadManager;
@@ -50,8 +50,7 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
 
     @PostConstruct
     @Transactional
-    @Override
-    public void init() {
+    void init() {
         ApplicationVariable rawCrawlingFinished = applicationVariables.findOne(CRAWLING_FINISHED_KEY);
 
         if (rawCrawlingFinished == null) {
@@ -67,7 +66,7 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
     public void handleImage(PictureInfo pictureInfo) {
         InterfaceliftPicture picture = pictureRepository.findOne(pictureInfo.getId());
         if (picture != null) {
-            log.fine(String.format("The picture has already known %s: ", picture.toString()));
+            log.info(String.format("The picture has already known %s: ", picture.toString()));
             successCountInARow.incrementAndGet();
             return;
         }
@@ -80,7 +79,7 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
     }
 
     @Override
-    public boolean shouldContinue() {
+    public boolean shouldContinueCrawling() {
         boolean result = true;
         if (crawlingFinished.get()) {
             result = (successCountInARow.get() < maxSuccessCountInARow);
@@ -91,8 +90,8 @@ public class NewPictureFoundHandlerServiceImpl implements NewPictureFoundHandler
 
     @Transactional
     @Override
-    public void handleFinish() {
-        log.fine("The crawling process has been successfully finished");
+    public void handleCrawlingFinish() {
+        log.info("The crawling process has been successfully finished");
         crawlingFinished.set(true);
         final ApplicationVariable rawCrawlingFinished = new ApplicationVariable(CRAWLING_FINISHED_KEY, Boolean.toString(true));
         applicationVariables.save(rawCrawlingFinished);

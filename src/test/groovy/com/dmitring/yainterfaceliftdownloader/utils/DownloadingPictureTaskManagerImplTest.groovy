@@ -1,6 +1,7 @@
 package com.dmitring.yainterfaceliftdownloader.utils
 
-import com.dmitring.yainterfaceliftdownloader.utils.impl.DownloadingPictureTaskManagerImpl
+import com.dmitring.yainterfaceliftdownloader.services.DownloadingPictureTaskManager
+import com.dmitring.yainterfaceliftdownloader.services.impl.DownloadingPictureTaskManagerImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,7 +27,7 @@ class DownloadingPictureTaskManagerImplTest {
     @Test
     void testTaskPutCompleteSuccessfully() {
         // arrange and act
-        def taskFuture = downloadingPictureTaskManager.putTask("someKey", (Supplier<Boolean>) { return true })
+        def taskFuture = downloadingPictureTaskManager.run("someKey", (Supplier<Boolean>) { return true })
 
         // assert
         AssertFutureUtil.getAndAssert(taskFuture, true, 100)
@@ -35,7 +36,7 @@ class DownloadingPictureTaskManagerImplTest {
     @Test
     void testTaskPutCompleteUnsuccessfully() {
         // arrange & act
-        def taskFuture = downloadingPictureTaskManager.putTask("someKey", (Supplier<Boolean>) { return false })
+        def taskFuture = downloadingPictureTaskManager.run("someKey", (Supplier<Boolean>) { return false })
 
         // assert
         AssertFutureUtil.getAndAssert(taskFuture, false, 100)
@@ -44,11 +45,11 @@ class DownloadingPictureTaskManagerImplTest {
     @Test
     void testReturnNullOnRunningTask() {
         // arrange & act
-        downloadingPictureTaskManager.putTask("someKey", (Supplier<Boolean>) {
+        downloadingPictureTaskManager.run("someKey", (Supplier<Boolean>) {
             Thread.sleep(100000)
             return true
         })
-        def taskFuture2 = downloadingPictureTaskManager.putTask("someKey", (Supplier<Boolean>) { return true })
+        def taskFuture2 = downloadingPictureTaskManager.run("someKey", (Supplier<Boolean>) { return true })
 
         // assert
         assertNull(taskFuture2)
@@ -58,11 +59,11 @@ class DownloadingPictureTaskManagerImplTest {
     void testEnsureCancelTask() {
         // arrange & act
         def key = "someKey"
-        def taskFuture = downloadingPictureTaskManager.putTask(key, (Supplier<Boolean>) {
+        def taskFuture = downloadingPictureTaskManager.run(key, (Supplier<Boolean>) {
             Thread.sleep(100)
             return false
         })
-        downloadingPictureTaskManager.ensureCancelTask(key)
+        downloadingPictureTaskManager.tryCancelTask(key)
 
         // assert
         try {

@@ -1,7 +1,7 @@
-package com.dmitring.yainterfaceliftdownloader.utils.crawler
+package com.dmitring.yainterfaceliftdownloader.services.crawler
 
 import com.dmitring.yainterfaceliftdownloader.domain.PictureInfo
-import com.dmitring.yainterfaceliftdownloader.utils.crawler.impl.InterfaceliftPageParserImpl
+import com.dmitring.yainterfaceliftdownloader.services.crawler.impl.InterfaceliftPageParserImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

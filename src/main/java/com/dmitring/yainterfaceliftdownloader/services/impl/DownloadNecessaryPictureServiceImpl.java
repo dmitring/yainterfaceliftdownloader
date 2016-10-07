@@ -30,12 +30,12 @@ public class DownloadNecessaryPictureServiceImpl implements DownloadNecessaryPic
     @Transactional
     @Override
     public void planNecessaryDownloads() {
-        log.fine("The downloading necessary pictures process has started");
+        log.info("The downloading necessary pictures process has started");
         pictureRepository.findByStatusIn(Arrays.asList(
                 PictureStatus.JUST_FOUND,
                 PictureStatus.ACCEPTED))
             .forEach(this::handleSinglePicture);
-        log.fine("The downloading necessary pictures process has stopped");
+        log.info("The downloading necessary pictures process has stopped");
     }
 
     private void handleSinglePicture(InterfaceliftPicture picture) {
