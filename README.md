@@ -1,7 +1,7 @@
 # yainterfaceliftdownloader
 
-Yet another interfacelift downloader 
-It's a fun project. The main purpose is downloading of amazing landscapes from interfacelift.com for fun. Now the project is coming to the end. But there are still a few non-critical issues. 
+Yet another interfacelift downloader.
+It's a fun project. The main purpose is downloading amazing landscapes from interfacelift.com for fun. Now the project is coming to the end. But there are still a few non-critical issues.
 
 ## The application has next functions:
 - Scan interfacelift.com, seek for new pictures. 
